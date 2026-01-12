@@ -1,0 +1,2 @@
+# Load and execute boot script
+uenvcmd=load mmc 0:1 ${loadaddr} boot.scr; source ${loadaddr}
