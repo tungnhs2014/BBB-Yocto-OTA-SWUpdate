@@ -8,15 +8,16 @@
 part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4 --fixed-size 32 --use-uuid
 
 # Partition 2: Root filesystem A (Active OS)
-# Size increased to 2048 MB (2 GB) to accommodate full image with SWUpdate, WiFi, etc.
-part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs_a --align 4 --fixed-size 2048 --use-uuid
+# 4GB - enough for rootfs + OTA extraction space
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs_a --align 4 --fixed-size 4096 --use-uuid
 
 # Partition 3: Root filesystem B (Standby for OTA updates)
-# Must be same size as partition A
-part /standby --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs_b --align 4 --fixed-size 2048 --use-uuid
+# Same size as partition A for dual-boot compatibility
+part /standby --source rootfs --ondisk mmcblk0 --fstype=ext4 --label rootfs_b --align 4 --fixed-size 4096 --use-uuid
 
-# Partition 4: Data partition (Persistent user data)
-part /data --ondisk mmcblk0 --fstype=ext4 --label data --align 4 --fixed-size 512 --use-uuid
+# Partition 4: Data partition (Persistent user data, logs, firmware packages)
+# 4GB for user data, logs, and OTA packages
+part /data --ondisk mmcblk0 --fstype=ext4 --label data --align 4 --fixed-size 4096 --use-uuid
 
 # Bootloader configuration - append kernel command line
 bootloader --append="console=ttyS0,115200"

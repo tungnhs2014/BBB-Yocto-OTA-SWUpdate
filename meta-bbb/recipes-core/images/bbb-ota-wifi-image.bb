@@ -85,14 +85,21 @@ IMAGE_INSTALL:append = " \
     libatomic \
 "
 
+IMAGE_INSTALL:append = " version-info"
+
 # ============================================================================
 # IMAGE SETTINGS
 # ============================================================================
 IMAGE_ROOTFS_EXTRA_SPACE = "300000"
 
+# Increase tmpfs to 768MB for SWUpdate archive extraction
+IMAGE_INSTALL:append = " base-files"
+FILESYSTEM_PERMS_TABLES = "${IMAGE_ROOTFS}/etc/fstab"
+
 # Use custom WIC file for dual-boot
 WKS_FILE = "bbb-dual-boot.wks"
-IMAGE_FSTYPES = "ext4 tar.xz wic wic.gz wic.bmap"
+# Use tar.gz for SWUpdate compatibility (gunzip handler)
+IMAGE_FSTYPES = "ext4 tar.gz wic wic.gz wic.bmap"
 
 # Bootloader dependencies - ensure all boot files are available for WIC
 # Include kernel (zImage) and device tree for boot partition
